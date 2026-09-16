@@ -3,118 +3,612 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FX - Multi-instrument Trading</title>
+    <title>FX - Next-Gen Multi-Instrument Trading Platform | 2026</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
+
+        :root {
+            --primary: #00d9ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --dark-bg: #0a0e27;
+            --card-bg: #1a1f3a;
+            --text: #e0e0e0;
+            --text-muted: #a0a0a0;
         }
-        
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Courier New', 'Courier', monospace;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a0e2e 50%, #16213e 100%);
+            color: var(--text);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(131, 56, 236, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            right: -150px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.1em;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.4s ease-out;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border: 2px solid;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark-bg);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.7);
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--dark-bg);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+
+        /* Features Section */
+        .section {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(26, 31, 58, 0.5);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 40px;
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .tech-badge {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(0, 217, 255, 0.2);
             padding: 60px 20px;
             text-align: center;
+            margin-top: 100px;
+            background: rgba(10, 14, 39, 0.5);
+            position: relative;
+            z-index: 3;
         }
-        
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        .container {
+
+        .footer-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
         }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
             gap: 30px;
-            margin: 40px 0;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
-        
-        .feature {
-            padding: 20px;
-            border-radius: 8px;
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-        }
-        
-        .feature h3 {
-            margin-bottom: 10px;
-            color: #667eea;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 5px;
+
+        .footer-links a {
+            color: var(--text-muted);
             text-decoration: none;
-            margin-top: 20px;
-            transition: background 0.3s;
+            transition: color 0.3s;
         }
-        
-        .cta-button:hover {
-            background: #764ba2;
+
+        .footer-links a:hover {
+            color: var(--primary);
         }
-        
-        footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            margin-top: 60px;
-            border-top: 1px solid #e0e0e0;
+
+        .footer-credit {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            nav ul {
+                gap: 15px;
+                font-size: 0.85em;
+            }
+
+            .hero p {
+                font-size: 1em;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Glitch effect for tech look */
+        @keyframes glitch {
+            0%, 100% { text-shadow: -2px 0 #ff006e, 2px 0 #00d9ff; }
+            50% { text-shadow: -2px 0 #00d9ff, 2px 0 #ff006e; }
+        }
+
+        .glitch:hover {
+            animation: glitch 0.3s;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>FX</h1>
-        <p>Multi-instrument Support - Trade Several Pairs at Once</p>
-    </header>
-    
-    <div class="container">
-        <section>
-            <h2>Welcome to FX</h2>
-            <p>A powerful platform for multi-instrument trading. Execute trades across multiple currency pairs simultaneously with ease and precision.</p>
-            
-            <div class="features">
-                <div class="feature">
-                    <h3>🎯 Multi-Instrument</h3>
-                    <p>Trade several forex pairs at once with a unified interface.</p>
+    <nav>
+        <div class="logo glitch">FX_</div>
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#tech">Technology</a></li>
+            <li><a href="https://github.com/forexexpo/fx" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-subtitle">Next Generation Trading</div>
+                <h1>FX Platform</h1>
+                <p>
+                    Multi-instrument support for advanced forex traders. Execute complex strategies across multiple pairs simultaneously with AI-enhanced analytics and real-time market intelligence.
+                </p>
+                <div class="cta-group">
+                    <a href="https://github.com/forexexpo/fx" class="btn btn-primary">Launch Platform</a>
+                    <a href="#features" class="btn btn-secondary">Explore Features</a>
                 </div>
-                <div class="feature">
-                    <h3>⚡ Real-time Updates</h3>
-                    <p>Get live market data and execute orders instantly.</p>
-                </div>
-                <div class="feature">
-                    <h3>📊 Advanced Analytics</h3>
-                    <p>Analyze trends and make data-driven trading decisions.</p>
+
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Pair Support</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">μs</div>
+                        <div class="stat-label">Execution Speed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">AI</div>
+                        <div class="stat-label">Powered Analytics</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Market Coverage</div>
+                    </div>
                 </div>
             </div>
-            
-            <a href="https://github.com/forexexpo/fx" class="cta-button">View on GitHub</a>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <h2 class="section-title">Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Ultra-Fast Execution</h3>
+                    <p>Microsecond-level order execution with zero-latency infrastructure. Trade ahead of market movements with our cutting-edge network topology.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Multi-Instrument Control</h3>
+                    <p>Simultaneously manage positions across unlimited currency pairs. Unified interface for complex, multi-leg trading strategies.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Market Intelligence</h3>
+                    <p>Machine learning algorithms analyze market patterns in real-time. Get predictive insights and automated trade recommendations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Deep technical analysis with real-time charting, correlation matrices, and volatility modeling. Data-driven decision making at scale.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Enterprise Security</h3>
+                    <p>Military-grade encryption, biometric authentication, and multi-signature transaction validation. Your capital, protected 24/7.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Global Infrastructure</h3>
+                    <p>Distributed nodes across all major financial hubs. Redundant systems ensure 99.99% uptime with automatic failover.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Deep Dive -->
+        <section class="section" id="stats">
+            <h2 class="section-title">Platform Metrics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">500K+</div>
+                    <div class="stat-label">Transactions/Second</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Currency Pairs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.4T</div>
+                    <div class="stat-label">Daily Volume</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">99.99%</div>
+                    <div class="stat-label">Uptime SLA</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Section -->
+        <section class="section" id="tech">
+            <h2 class="section-title">Technology Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">WebSocket 5G</span>
+                <span class="tech-badge">FPGA Processing</span>
+                <span class="tech-badge">Quantum-Ready</span>
+                <span class="tech-badge">Machine Learning</span>
+                <span class="tech-badge">Blockchain Settlement</span>
+                <span class="tech-badge">Real-time Data Feeds</span>
+                <span class="tech-badge">Cloud Native</span>
+                <span class="tech-badge">API First</span>
+            </div>
         </section>
     </div>
-    
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 ForexExpo. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/forexexpo/fx" target="_blank">GitHub Repository</a>
+                <a href="#features">Features</a>
+                <a href="#tech">Technology</a>
+                <a href="mailto:contact@forexexpo.com">Contact</a>
+            </div>
+            <div class="footer-credit">
+                © 2026 ForexExpo | FX Platform v2.0 | Built for the Future of Trading
+            </div>
+        </div>
     </footer>
 </body>
 </html>
